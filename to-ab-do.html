@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>To(AB)-Do</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap">
+<style>
+:root{--bg:#fff7ed;--card:#ffffff;--text:#2b1d3a;--muted:#8a7a99;--p:#7c3aed;--p2:#ec4899;--p3:#f59e0b;--line:#eadfff;--ok:#10b981;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150f24;--card:#211736;--text:#f5eeff;--muted:#a597bd;--line:#3a2b59}}
+:root[data-theme="dark"]{--bg:#150f24;--card:#211736;--text:#f5eeff;--muted:#a597bd;--line:#3a2b59}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--text);font-family:'Cairo',system-ui,sans-serif;
+background-image:radial-gradient(circle at 15% 10%,#ec489933,transparent 40%),radial-gradient(circle at 85% 90%,#7c3aed33,transparent 45%)}
+.wrap{max-width:560px;margin:0 auto;padding:28px 16px 60px}
+.logo{direction:ltr;text-align:center;font-size:clamp(2.6rem,12vw,4.2rem);font-weight:900;margin:0;letter-spacing:-1px;line-height:1.1}
+.logo .to,.logo .do{background:linear-gradient(90deg,var(--p),var(--p2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo .ab{display:inline-block;background:linear-gradient(135deg,var(--p3),var(--p2));color:#fff;padding:0 .18em;border-radius:.3em;transform:rotate(-4deg);margin:0 .06em;box-shadow:0 6px 0 #c2410c55;animation:wob 3s ease-in-out infinite}
+.logo .dash{color:var(--muted)}
+@keyframes wob{50%{transform:rotate(3deg) scale(1.06)}}
+.tag{text-align:center;color:var(--muted);margin:8px 0 22px;font-weight:700}
+.card{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 10px 30px #7c3aed1f}
+.add{display:flex;gap:8px}
+.add input{flex:1;min-width:0;font:inherit;font-size:1.05rem;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--text);outline:none}
+.add input:focus{border-color:var(--p)}
+.btn{font:inherit;font-weight:900;border:0;border-radius:14px;padding:0 18px;color:#fff;cursor:pointer;background:linear-gradient(135deg,var(--p),var(--p2));box-shadow:0 5px 0 #5b21b6;transition:transform .1s}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #5b21b6}
+.bar{height:12px;background:var(--line);border-radius:99px;overflow:hidden;margin:16px 0 6px}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--p3),var(--p2),var(--p));transition:width .5s}
+.stat{display:flex;justify-content:space-between;color:var(--muted);font-size:.9rem;font-weight:700}
+ul{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+li{display:flex;align-items:center;gap:12px;padding:12px;border-radius:16px;background:var(--bg);border:2px solid var(--line);animation:in .3s}
+@keyframes in{from{opacity:0;transform:translateY(10px)}}
+li.done{opacity:.6}
+li.done .t{text-decoration:line-through;color:var(--muted)}
+.ck{flex:none;width:34px;height:34px;border-radius:50%;border:3px solid var(--p);background:transparent;cursor:pointer;color:#fff;font-size:1.1rem;display:grid;place-items:center;transition:.2s}
+li.done .ck{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
+.t{flex:1;font-weight:700;word-break:break-word}
+.x{background:none;border:0;color:var(--muted);font-size:1.2rem;cursor:pointer}
+.x:hover{color:#ef4444}
+.empty{text-align:center;color:var(--muted);padding:26px 0;font-weight:700}
+.tools{display:flex;justify-content:center;gap:10px;margin-top:18px}
+.tools button{font:inherit;font-weight:700;background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:99px;padding:6px 16px;cursor:pointer}
+#cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
+#ov{position:fixed;inset:0;z-index:40;display:none;place-items:center;text-align:center;background:#150f24b3;cursor:pointer;padding:20px}
+#ov.on{display:grid;animation:fade .25s}
+@keyframes fade{from{opacity:0}}
+#ov .big{font-size:clamp(5rem,28vw,10rem);animation:pop .7s cubic-bezier(.2,1.8,.4,1) both;filter:drop-shadow(0 10px 30px #f59e0b)}
+#ov h2{margin:0;font-size:clamp(2rem,9vw,3.4rem);font-weight:900;color:#fff;text-shadow:0 4px 0 #7c3aed,0 0 30px #ec4899;animation:pop .7s .1s cubic-bezier(.2,1.8,.4,1) both}
+#ov p{color:#ffe;font-weight:700;font-size:1.2rem;margin:8px 0 0;animation:pop .7s .2s both}
+@keyframes pop{from{transform:scale(0) rotate(-20deg);opacity:0}}
+</style>
+</head>
+<body>
+<canvas id="cv"></canvas>
+<div id="ov"><div><div class="big" id="ovE">🎉</div><h2 id="ovT"></h2><p id="ovP"></p></div></div>
+<div class="wrap">
+  <h1 class="logo"><span class="to">To</span><span class="ab">(AB)</span><span class="dash">-</span><span class="do">Do</span></h1>
+  <div class="tag">خلّص مهمة… وأنا هعملك حفلة! 🥳</div>
+  <div class="card">
+    <div class="add">
+      <input id="inp" placeholder="عاوز تنجز إيه النهارده؟" maxlength="120" autocomplete="off">
+      <button class="btn" id="addB">إضافة</button>
+    </div>
+    <div class="bar"><i id="pb"></i></div>
+    <div class="stat"><span id="s1">0 من 0</span><span id="s2">🏆 اتنجز: 0</span></div>
+    <ul id="list"></ul>
+  </div>
+  <div class="tools"><button id="mute">🔊 الموسيقى: شغّالة</button><button id="clr">🧹 مسح المنجز</button></div>
+</div>
+<script>
+(function(){
+var tasks=[],muted=false,total=0;
+try{tasks=JSON.parse(localStorage.getItem('toabdo')||'[]');total=+localStorage.getItem('toabdo_total')||0;muted=localStorage.getItem('toabdo_mute')==='1'}catch(e){}
+if(!Array.isArray(tasks))tasks=[];
+function save(){try{localStorage.setItem('toabdo',JSON.stringify(tasks));localStorage.setItem('toabdo_total',total);localStorage.setItem('toabdo_mute',muted?'1':'0')}catch(e){}}
+var $=function(i){return document.getElementById(i)};
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function render(){
+  var l=$('list');
+  l.innerHTML=tasks.length?'':'<div class="empty">مفيش مهام لسه… ضيف أول واحدة ✨</div>';
+  tasks.forEach(function(t){
+    var li=document.createElement('li');li.className=t.d?'done':'';
+    li.innerHTML='<button class="ck" aria-label="إنجاز">'+(t.d?'✓':'')+'</button><span class="t">'+esc(t.t)+'</span><button class="x" aria-label="حذف">✕</button>';
+    li.children[0].onclick=function(e){toggle(t.id,e)};
+    li.children[2].onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
+    l.appendChild(li);
+  });
+  var d=tasks.filter(function(t){return t.d}).length;
+  $('pb').style.width=(tasks.length?d/tasks.length*100:0)+'%';
+  $('s1').textContent=d+' من '+tasks.length;
+  $('s2').textContent='🏆 اتنجز: '+total;
+  $('mute').textContent=muted?'🔇 الموسيقى: مقفولة':'🔊 الموسيقى: شغّالة';
+}
+function add(){var v=$('inp').value.trim();if(!v)return;tasks.unshift({id:Date.now()+Math.random(),t:v,d:false});$('inp').value='';save();render();blip()}
+$('addB').onclick=add;$('inp').onkeydown=function(e){if(e.key==='Enter')add()};
+$('mute').onclick=function(){muted=!muted;save();render();if(!muted)blip()};
+$('clr').onclick=function(){tasks=tasks.filter(function(t){return !t.d});save();render()};
+function toggle(id,e){
+  var t=tasks.filter(function(x){return x.id===id})[0];if(!t)return;
+  t.d=!t.d;
+  if(t.d){total++;save();render();celebrate(t.t,e)}else{total=Math.max(0,total-1);save();render()}
+}
+/* ---------- Audio ---------- */
+var ac=null;
+function ctx(){if(!ac){try{ac=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(ac.state==='suspended')ac.resume();return ac}
+function tone(f,t0,dur,type,vol){
+  var o=ac.createOscillator(),g=ac.createGain();o.type=type||'triangle';o.frequency.value=f;
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(vol||.15,t0+.02);g.gain.exponentialRampToValueAtTime(.001,t0+dur);
+  o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+dur+.05);
+}
+function drum(t0){
+  var o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(160,t0);o.frequency.exponentialRampToValueAtTime(40,t0+.15);
+  g.gain.setValueAtTime(.4,t0);g.gain.exponentialRampToValueAtTime(.001,t0+.2);o.connect(g);g.connect(ac.destination);o.start(t0);o.stop(t0+.25);
+}
+function blip(){if(muted)return;var c=ctx();if(!c)return;var n=c.currentTime;tone(660,n,.1,'sine',.1);tone(880,n+.08,.12,'sine',.1)}
+var N={C5:523.25,D5:587.33,E5:659.25,F5:698.46,G5:783.99,A5:880,B5:987.77,C6:1046.5,E6:1318.5,G6:1567.98,C4:261.63,G4:392};
+var songs=[
+ [['C5',0,.14],['E5',.14,.14],['G5',.28,.14],['C6',.42,.14],['G5',.56,.14],['C6',.7,.14],['E6',.84,.5],['C6',.84,.5],['G5',.84,.5]],
+ [['G4',0,.12],['G4',.12,.12],['G4',.24,.12],['C5',.4,.4],['E5',.8,.12],['E5',.92,.12],['E5',1.04,.12],['G5',1.2,.6],['C6',1.2,.6],['E6',1.2,.6]],
+ [['C5',0,.1],['D5',.1,.1],['E5',.2,.1],['G5',.3,.1],['A5',.4,.1],['C6',.5,.15],['B5',.68,.1],['C6',.8,.15],['E6',.98,.15],['G6',1.15,.7],['C6',1.15,.7],['E6',1.15,.7]]
+];
+function music(){
+  if(muted)return;var c=ctx();if(!c)return;var n=c.currentTime+.02;
+  var s=songs[Math.floor(Math.random()*songs.length)];
+  s.forEach(function(x){tone(N[x[0]],n+x[1],x[2]+.15,'triangle',.14);tone(N[x[0]]/2,n+x[1],x[2]+.1,'sine',.08)});
+  [0,.28,.56,.84].forEach(function(d){drum(n+d)});
+  for(var i=0;i<8;i++)tone(2000+Math.random()*2500,n+.9+i*.07,.2,'sine',.04);
+}
+/* ---------- Confetti ---------- */
+var cv=$('cv'),cx=cv.getContext('2d'),P=[],run=false,W,H;
+function size(){W=cv.width=innerWidth;H=cv.height=innerHeight}size();addEventListener('resize',size);
+var COL=['#f59e0b','#ec4899','#7c3aed','#10b981','#38bdf8','#fde047','#fb7185'];
+function burst(x,y,n){
+  for(var i=0;i<n;i++){var a=Math.random()*Math.PI*2,v=4+Math.random()*10;
+    P.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-5,s:5+Math.random()*8,c:COL[Math.floor(Math.random()*COL.length)],r:Math.random()*6,vr:(Math.random()-.5)*.4,l:100+Math.random()*60,sh:Math.random()<.3})}
+  if(!run){run=true;requestAnimationFrame(tick)}
+}
+function rain(n){for(var i=0;i<n;i++)P.push({x:Math.random()*W,y:-20-Math.random()*200,vx:(Math.random()-.5)*2,vy:2+Math.random()*4,s:6+Math.random()*7,c:COL[Math.floor(Math.random()*COL.length)],r:0,vr:(Math.random()-.5)*.3,l:200,sh:false});if(!run){run=true;requestAnimationFrame(tick)}}
+function tick(){
+  cx.clearRect(0,0,W,H);
+  P=P.filter(function(p){return p.l>0&&p.y<H+30});
+  P.forEach(function(p){
+    p.vy+=.22;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;p.l--;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;cx.globalAlpha=Math.min(1,p.l/30);
+    if(p.sh){cx.beginPath();cx.arc(0,0,p.s/2,0,7);cx.fill()}else cx.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);
+    cx.restore();
+  });
+  if(P.length)requestAnimationFrame(tick);else{run=false;cx.clearRect(0,0,W,H)}
+}
+/* ---------- Celebration ---------- */
+var MSG=['عاش يا بطل! 🔥','أسطورة! 👑','مهمة وانتهت! 💪','إنت جامد جدًا! 😎','يا سلام يا سلام! 🤩','نجم النجوم! ⭐','كمّل يا وحش! 🚀','تحفة! 🎯'];
+var EM=['🎉','🏆','🥳','🚀','⭐','👑','🔥','🎊'];
+var hideT;
+function celebrate(name,e){
+  var i=Math.floor(Math.random()*MSG.length);
+  $('ovE').textContent=EM[i];$('ovT').textContent=MSG[i];$('ovP').textContent='خلّصت: '+name;
+  var o=$('ov');o.classList.remove('on');void o.offsetWidth;o.classList.add('on');
+  music();
+  burst(W/2,H/2,160);rain(90);
+  [250,500,750,1000,1300].forEach(function(d){setTimeout(function(){burst(W*(.15+Math.random()*.7),H*(.15+Math.random()*.4),70)},d)});
+  clearTimeout(hideT);hideT=setTimeout(function(){o.classList.remove('on')},2800);
+  if(navigator.vibrate)try{navigator.vibrate([60,40,60,40,120])}catch(x){}
+}
+$('ov').onclick=function(){this.classList.remove('on')};
+render();
+})();
+</script>
+</body>
+</html>
