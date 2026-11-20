@@ -51,6 +51,27 @@ li.done .ck{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
 .empty{text-align:center;color:var(--muted);padding:26px 0;font-weight:700}
 .tools{display:flex;justify-content:center;gap:10px;margin-top:18px}
 .tools button{font:inherit;font-weight:700;background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:99px;padding:6px 16px;cursor:pointer}
+.hide{display:none!important}
+.hi{text-align:center;font-weight:900;color:var(--p);margin:-10px 0 16px}
+.auth{margin-top:6px}
+.auth input{display:block;width:100%;font:inherit;font-size:1.05rem;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--text);outline:none}
+.auth input:focus{border-color:var(--p)}
+.auth .btn{width:100%;padding:13px;font-size:1.05rem}
+.tabs{display:flex;gap:8px;margin-bottom:14px}
+.tabs button{flex:1;font:inherit;font-weight:900;padding:10px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--muted);cursor:pointer}
+.tabs button.on{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;border-color:transparent}
+#err{color:#ef4444;font-weight:700;min-height:1.4em;margin:2px 0 10px;text-align:center}
+.note{color:var(--muted);font-size:.8rem;text-align:center;margin:12px 0 0}
+.in{width:100%;font:inherit;font-size:1.05rem;padding:12px 14px;margin-bottom:10px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--text);outline:none}
+.in:focus{border-color:var(--p)}
+.ah{margin:0 0 12px;font-weight:900;font-size:1.3rem}
+.arow{display:flex;gap:10px}.arow .btn{flex:1;padding:12px 0}
+.btn.alt{background:linear-gradient(135deg,var(--p3),var(--p2));box-shadow:0 5px 0 #c2410c}
+.amsg{min-height:1.4em;margin-top:10px;font-weight:700;color:#ef4444;text-align:center}
+.note{color:var(--muted);font-size:.82rem;text-align:center;margin:8px 0 0}
+.ubar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-weight:900}
+.ubar button{font:inherit;font-weight:700;background:var(--card);color:var(--text);border:2px solid var(--line);border-radius:99px;padding:4px 14px;cursor:pointer}
+.dt{display:block;font-size:.75rem;color:var(--muted);font-weight:400}
 #cv{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:50}
 #ov{position:fixed;inset:0;z-index:40;display:none;place-items:center;text-align:center;background:#150f24b3;cursor:pointer;padding:20px}
 #ov.on{display:grid;animation:fade .25s}
@@ -64,10 +85,33 @@ li.done .ck{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
 <body>
 <canvas id="cv"></canvas>
 <div id="ov"><div><div class="big" id="ovE">🎉</div><h2 id="ovT"></h2><p id="ovP"></p></div></div>
-<div class="wrap">
+<div class="wrap hide" id="auth-wrap" style="padding-bottom:0">
+  <h1 class="logo"><span class="to">To</span><span class="ab">(AB)</span><span class="dash">-</span><span class="do">Do</span></h1>
+  <div class="tag">سجّل دخولك عشان مهامك تفضل ليك</div>
+  <div class="card auth">
+    <div class="tabs"><button id="tL" class="on">دخول</button><button id="tR">حساب جديد</button></div>
+    <input id="au" placeholder="اسم المستخدم" autocomplete="username" maxlength="30">
+    <input id="ap" type="password" placeholder="كلمة السر" autocomplete="current-password">
+    <input id="ap2" type="password" placeholder="أعد كلمة السر" autocomplete="new-password" class="hide">
+    <div id="err"></div>
+    <button class="btn" id="go">ادخل</button>
+    <p class="note">الحسابات محفوظة على جهازك أنت بس، ومفيش سيرفر.</p>
+  </div>
+</div>
+<div class="wrap hide" id="wrap">
   <h1 class="logo"><span class="to">To</span><span class="ab">(AB)</span><span class="dash">-</span><span class="do">Do</span></h1>
   <div class="tag">خلّص مهمة… وأنا هعملك حفلة! 🥳</div>
-  <div class="card">
+  <div class="hi" id="hi"></div>
+  <div class="card" id="auth" style="display:none">
+    <h3 class="ah">🔐 ادخل حسابك</h3>
+    <input class="in" id="un" placeholder="اسم المستخدم" autocomplete="username" maxlength="20">
+    <input class="in" id="pw" type="password" placeholder="كلمة السر (٤ حروف أو أكتر)" autocomplete="current-password" maxlength="40">
+    <div class="arow"><button class="btn" id="loginB">دخول</button><button class="btn alt" id="signB">حساب جديد</button></div>
+    <div class="amsg" id="amsg"></div>
+    <p class="note">الحسابات محفوظة على الجهاز ده بس</p>
+  </div>
+  <div class="ubar" id="ubar" style="display:none"><span id="hi"></span><button id="out">خروج 🚪</button></div>
+  <div class="card" id="appCard" style="display:none">
     <div class="add">
       <input id="inp" placeholder="عاوز تنجز إيه النهارده؟" maxlength="120" autocomplete="off">
       <button class="btn" id="addB">إضافة</button>
@@ -76,14 +120,107 @@ li.done .ck{background:var(--ok);border-color:var(--ok);transform:scale(1.1)}
     <div class="stat"><span id="s1">0 من 0</span><span id="s2">🏆 اتنجز: 0</span></div>
     <ul id="list"></ul>
   </div>
-  <div class="tools"><button id="mute">🔊 الموسيقى: شغّالة</button><button id="clr">🧹 مسح المنجز</button></div>
+  <div class="tools" id="tools" style="display:none"><button id="mute">🔊 الموسيقى: شغّالة</button><button id="clr">🧹 مسح المنجز</button><button id="out">🚪 خروج</button></div>
 </div>
 <script>
 (function(){
+var $=function(i){return document.getElementById(i)},UK='toabdo_users',SK='toabdo_session',mode='L';
+function users(){try{return JSON.parse(localStorage.getItem(UK)||'{}')||{}}catch(e){return {}}}
+function hex(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+function hash(p,salt){var en=new TextEncoder();return crypto.subtle.importKey('raw',en.encode(p),'PBKDF2',false,['deriveBits']).then(function(k){return crypto.subtle.deriveBits({name:'PBKDF2',salt:en.encode(salt),iterations:100000,hash:'SHA-256'},k,256)}).then(hex)}
+var us=users(),s=null;try{s=localStorage.getItem(SK)}catch(e){}
+if(s&&us[s]){
+  window.TOABDO_USER=s;$('wrap').classList.remove('hide');$('hi').textContent='أهلاً يا '+us[s].name+' 👋';
+  $('out').onclick=function(){try{localStorage.removeItem(SK)}catch(e){}location.reload()};
+}else{
+  $('auth-wrap').classList.remove('hide');
+  function setMode(m){mode=m;$('tL').className=m==='L'?'on':'';$('tR').className=m==='R'?'on':'';$('ap2').classList.toggle('hide',m==='L');$('go').textContent=m==='L'?'ادخل':'اعمل الحساب';$('ap').autocomplete=m==='L'?'current-password':'new-password';$('err').textContent=''}
+  $('tL').onclick=function(){setMode('L')};$('tR').onclick=function(){setMode('R')};
+  function fail(m){$('err').textContent=m}
+  function enter(key){try{localStorage.setItem(SK,key)}catch(e){}location.reload()}
+  function go(){
+    var name=$('au').value.trim(),key=name.toLowerCase(),pw=$('ap').value,u=users();
+    if(!name||!pw)return fail('اكتب اسم المستخدم وكلمة السر');
+    if(!window.crypto||!crypto.subtle)return fail('المتصفح ده مش بيدعم التشفير، افتح الموقع من رابط https');
+    if(mode==='L'){
+      if(!u[key])return fail('الحساب ده مش موجود');
+      hash(pw,u[key].salt).then(function(h){h===u[key].hash?enter(key):fail('كلمة السر غلط')});
+    }else{
+      if(u[key])return fail('الاسم ده مستخدم قبل كده');
+      if(pw.length<4)return fail('كلمة السر لازم 4 حروف على الأقل');
+      if(pw!==$('ap2').value)return fail('كلمتين السر مش متطابقين');
+      var a=new Uint8Array(16);crypto.getRandomValues(a);var salt=hex(a);
+      hash(pw,salt).then(function(h){
+        u[key]={name:name,salt:salt,hash:h};
+        try{
+          localStorage.setItem(UK,JSON.stringify(u));
+          if(Object.keys(u).length===1){var old=localStorage.getItem('toabdo');if(old){localStorage.setItem('toabdo:'+key,old);localStorage.setItem('toabdo_total:'+key,localStorage.getItem('toabdo_total')||'0');localStorage.removeItem('toabdo');localStorage.removeItem('toabdo_total')}}
+        }catch(e){return fail('مش قادر أحفظ الحساب، المتصفح مانع التخزين')}
+        enter(key);
+      });
+    }
+  }
+  $('go').onclick=go;
+  ['au','ap','ap2'].forEach(function(i){$(i).onkeydown=function(e){if(e.key==='Enter')go()}});
+}
+})();
+</script>
+<script>
+(function(){
+var U=window.TOABDO_USER;if(!U)return;
+var K="toabdo:"+U,KT="toabdo_total:"+U;
+var tasks=[],muted=false,total=0,user=null;
+try{muted=localStorage.getItem('toabdo_mute')==='1'}catch(e){}
+function save(){try{localStorage.setItem('toabdo_mute',muted?'1':'0');if(user)localStorage.setItem('toabdo_d_'+user.key,JSON.stringify({tasks:tasks,total:total}))}catch(e){}}
+var $=function(i){return document.getElementById(i)},UK='toabdo_users',SK='toabdo_session',mode='L';
+function users(){try{return JSON.parse(localStorage.getItem(UK)||'{}')||{}}catch(e){return {}}}
+function hex(b){return Array.prototype.map.call(new Uint8Array(b),function(x){return('0'+x.toString(16)).slice(-2)}).join('')}
+function hash(p,salt){var en=new TextEncoder();return crypto.subtle.importKey('raw',en.encode(p),'PBKDF2',false,['deriveBits']).then(function(k){return crypto.subtle.deriveBits({name:'PBKDF2',salt:en.encode(salt),iterations:100000,hash:'SHA-256'},k,256)}).then(hex)}
+var us=users(),s=null;try{s=localStorage.getItem(SK)}catch(e){}
+if(s&&us[s]){
+  window.TOABDO_USER=s;$('wrap').classList.remove('hide');$('hi').textContent='أهلاً يا '+us[s].name+' 👋';
+  $('out').onclick=function(){try{localStorage.removeItem(SK)}catch(e){}location.reload()};
+}else{
+  $('auth-wrap').classList.remove('hide');
+  function setMode(m){mode=m;$('tL').className=m==='L'?'on':'';$('tR').className=m==='R'?'on':'';$('ap2').classList.toggle('hide',m==='L');$('go').textContent=m==='L'?'ادخل':'اعمل الحساب';$('ap').autocomplete=m==='L'?'current-password':'new-password';$('err').textContent=''}
+  $('tL').onclick=function(){setMode('L')};$('tR').onclick=function(){setMode('R')};
+  function fail(m){$('err').textContent=m}
+  function enter(key){try{localStorage.setItem(SK,key)}catch(e){}location.reload()}
+  function go(){
+    var name=$('au').value.trim(),key=name.toLowerCase(),pw=$('ap').value,u=users();
+    if(!name||!pw)return fail('اكتب اسم المستخدم وكلمة السر');
+    if(!window.crypto||!crypto.subtle)return fail('المتصفح ده مش بيدعم التشفير، افتح الموقع من رابط https');
+    if(mode==='L'){
+      if(!u[key])return fail('الحساب ده مش موجود');
+      hash(pw,u[key].salt).then(function(h){h===u[key].hash?enter(key):fail('كلمة السر غلط')});
+    }else{
+      if(u[key])return fail('الاسم ده مستخدم قبل كده');
+      if(pw.length<4)return fail('كلمة السر لازم 4 حروف على الأقل');
+      if(pw!==$('ap2').value)return fail('كلمتين السر مش متطابقين');
+      var a=new Uint8Array(16);crypto.getRandomValues(a);var salt=hex(a);
+      hash(pw,salt).then(function(h){
+        u[key]={name:name,salt:salt,hash:h};
+        try{
+          localStorage.setItem(UK,JSON.stringify(u));
+          if(Object.keys(u).length===1){var old=localStorage.getItem('toabdo');if(old){localStorage.setItem('toabdo:'+key,old);localStorage.setItem('toabdo_total:'+key,localStorage.getItem('toabdo_total')||'0');localStorage.removeItem('toabdo');localStorage.removeItem('toabdo_total')}}
+        }catch(e){return fail('مش قادر أحفظ الحساب، المتصفح مانع التخزين')}
+        enter(key);
+      });
+    }
+  }
+  $('go').onclick=go;
+  ['au','ap','ap2'].forEach(function(i){$(i).onkeydown=function(e){if(e.key==='Enter')go()}});
+}
+})();
+</script>
+<script>
+(function(){
+var U=window.TOABDO_USER;if(!U)return;
+var K="toabdo:"+U,KT="toabdo_total:"+U;
 var tasks=[],muted=false,total=0;
-try{tasks=JSON.parse(localStorage.getItem('toabdo')||'[]');total=+localStorage.getItem('toabdo_total')||0;muted=localStorage.getItem('toabdo_mute')==='1'}catch(e){}
+try{tasks=JSON.parse(localStorage.getItem(K)||'[]');total=+localStorage.getItem(KT)||0;muted=localStorage.getItem('toabdo_mute')==='1'}catch(e){}
 if(!Array.isArray(tasks))tasks=[];
-function save(){try{localStorage.setItem('toabdo',JSON.stringify(tasks));localStorage.setItem('toabdo_total',total);localStorage.setItem('toabdo_mute',muted?'1':'0')}catch(e){}}
+function save(){try{localStorage.setItem(K,JSON.stringify(tasks));localStorage.setItem(KT,total);localStorage.setItem('toabdo_mute',muted?'1':'0')}catch(e){}}
 var $=function(i){return document.getElementById(i)};
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 function render(){
@@ -91,7 +228,7 @@ function render(){
   l.innerHTML=tasks.length?'':'<div class="empty">مفيش مهام لسه… ضيف أول واحدة ✨</div>';
   tasks.forEach(function(t){
     var li=document.createElement('li');li.className=t.d?'done':'';
-    li.innerHTML='<button class="ck" aria-label="إنجاز">'+(t.d?'✓':'')+'</button><span class="t">'+esc(t.t)+'</span><button class="x" aria-label="حذف">✕</button>';
+    li.innerHTML='<button class="ck" aria-label="إنجاز">'+(t.d?'✓':'')+'</button><span class="t">'+esc(t.t)+(t.d&&t.at?'<small class="dt">اتنجزت '+new Date(t.at).toLocaleDateString('ar-EG',{day:'numeric',month:'short'})+'</small>':'')+'</span><button class="x" aria-label="حذف">✕</button>';
     li.children[0].onclick=function(e){toggle(t.id,e)};
     li.children[2].onclick=function(){tasks=tasks.filter(function(x){return x.id!==t.id});save();render()};
     l.appendChild(li);
@@ -108,7 +245,7 @@ $('mute').onclick=function(){muted=!muted;save();render();if(!muted)blip()};
 $('clr').onclick=function(){tasks=tasks.filter(function(t){return !t.d});save();render()};
 function toggle(id,e){
   var t=tasks.filter(function(x){return x.id===id})[0];if(!t)return;
-  t.d=!t.d;
+  t.d=!t.d;t.at=t.d?Date.now():0;
   if(t.d){total++;save();render();celebrate(t.t,e)}else{total=Math.max(0,total-1);save();render()}
 }
 /* ---------- Audio ---------- */
@@ -173,7 +310,61 @@ function celebrate(name,e){
   if(navigator.vibrate)try{navigator.vibrate([60,40,60,40,120])}catch(x){}
 }
 $('ov').onclick=function(){this.classList.remove('on')};
-render();
+/* ---------- Auth ---------- */
+function users(){try{return JSON.parse(localStorage.getItem('toabdo_users')||'{}')}catch(e){return {}}}
+function b64(b){return btoa(String.fromCharCode.apply(null,new Uint8Array(b)))}
+function unb64(s){return Uint8Array.from(atob(s),function(c){return c.charCodeAt(0)})}
+async function hashPw(pw,salt){
+  var k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);
+  return b64(await crypto.subtle.deriveBits({name:'PBKDF2',salt:salt,iterations:100000,hash:'SHA-256'},k,256));
+}
+function show(id,v,d){$(id).style.display=v?(d||'block'):'none'}
+function msg(t,ok){var m=$('amsg');m.textContent=t||'';m.style.color=ok?'#10b981':'#ef4444'}
+function enter(key){
+  var u=users()[key];if(!u)return false;
+  user={key:key,name:u.name};
+  try{localStorage.setItem('toabdo_session',key)}catch(e){}
+  var d={};try{d=JSON.parse(localStorage.getItem('toabdo_d_'+key)||'{}')}catch(e){}
+  tasks=Array.isArray(d.tasks)?d.tasks:[];total=+d.total||0;
+  $('hi').textContent='أهلًا يا '+u.name+' 👋';
+  show('auth',0);show('appCard',1);show('tools',1,'flex');show('ubar',1,'flex');render();return true;
+}
+function leave(){
+  user=null;tasks=[];total=0;try{localStorage.removeItem('toabdo_session')}catch(e){}
+  $('un').value='';$('pw').value='';msg('');
+  show('appCard',0);show('tools',0);show('ubar',0);show('auth',1);
+}
+function creds(){
+  var n=$('un').value.trim(),p=$('pw').value;
+  if(n.length<2){msg('اسم المستخدم لازم حرفين على الأقل');return null}
+  if(p.length<4){msg('كلمة السر لازم ٤ حروف على الأقل');return null}
+  if(!window.crypto||!crypto.subtle){msg('المتصفح ده مش بيدعم التشفير، افتح الموقع من رابط https');return null}
+  return {n:n,k:n.toLowerCase(),p:p};
+}
+$('signB').onclick=async function(){
+  var c=creds();if(!c)return;
+  var all=users();
+  if(all[c.k]){msg('الاسم ده موجود قبل كده، جرّب اسم تاني أو سجّل دخول');return}
+  var salt=crypto.getRandomValues(new Uint8Array(16));
+  all[c.k]={name:c.n,salt:b64(salt),hash:await hashPw(c.p,salt)};
+  try{
+    localStorage.setItem('toabdo_users',JSON.stringify(all));
+    var old=localStorage.getItem('toabdo');
+    if(old&&Object.keys(all).length===1){localStorage.setItem('toabdo_d_'+c.k,JSON.stringify({tasks:JSON.parse(old),total:+localStorage.getItem('toabdo_total')||0}));localStorage.removeItem('toabdo');localStorage.removeItem('toabdo_total')}
+  }catch(e){msg('مقدرتش أحفظ الحساب، اتأكد إن المتصفح مش في وضع التصفح الخفي');return}
+  enter(c.k);blip();
+};
+$('loginB').onclick=async function(){
+  var c=creds();if(!c)return;
+  var u=users()[c.k];
+  if(!u){msg('مفيش حساب بالاسم ده، اضغط "حساب جديد"');return}
+  if(await hashPw(c.p,unb64(u.salt))!==u.hash){msg('كلمة السر غلط');return}
+  enter(c.k);blip();
+};
+$('pw').onkeydown=function(e){if(e.key==='Enter')$('loginB').click()};
+$('out').onclick=leave;
+var ses=null;try{ses=localStorage.getItem('toabdo_session')}catch(e){}
+if(!(ses&&enter(ses)))leave();
 })();
 </script>
 <script>if('serviceWorker' in navigator){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}</script>
